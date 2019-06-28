@@ -78,54 +78,16 @@ class Login(webapp2.RequestHandler):
         pass
 class Messenger_R(webapp2.RequestHandler):
     def get(self):
-        #req = json.loads(self.request.body)
-        query=Sender.query().order(-Sender.content)
+        query=Sender.query().fetch()
+        print query
         d=[];
         for i in query:
             d.append({
-                'content':d.content
+                'content':i.content
                 })
         print d
         self.response.out.write(json.dumps(d))
-            
-
-
-        
-        #send.sender_key = key1
-        #send.receiver_key = key2
-
-
-
-        #content = req.get('content'))
-        #chat.put()
-
-    #     #request=json.loads(self.request.body)
-    #     print self
-    #     #reciver=Reciver()
-    #     #end=Sender()
-    #     key1=sender_key.get()
-    #     key2=reciver_key.get()
-        
-
-    #     data=query(key1.reciver_key==key2.reciver_key)
-    #     if (data):
-    #         key2.content=key1.content
-    #         key2.put()
-    #         query=Reciver.query().order(-Reciver.content)
-    #         d=[]
-    #         for i in query:
-    #             d.append({
-    #                 'content':i.content
-    #                 })
-    #         self.response.out(json.dumps(d))
-           
-    #     else:
-    #         self.response.out.write("Reciver not found!")
-    #     #query=Reciver.query(reciver_key==reciver.reciver_key).get()
-    #     #if (query):
-    #     #reciver.Content=send.Content
-    #     # #reciver.put()
-        
+                
     def post(self):
         pass
 
@@ -133,30 +95,13 @@ class Messenger(webapp2.RequestHandler):
     def post(self):
         request=json.loads(self.request.body)
         send=Sender()
-       # User.Content=self.request.get('Content')
-        #send.send_time=request.get('send_time')
         send.sender_key=ndb.Key(urlsafe=request.get('sender_key'))
         send.reciver_key=ndb.Key(urlsafe=request.get('reciver_key'))
         send.content=request.get('content')
         send.put()
 
         
-        # reciver_key=send.reciver_key
-
-        # reciver=Reciver()
-        # query=Reciver.query(reciver_key==reciver.reciver_key).get()
-        # if (query):
-        #     reciver.Content=send.Content            
-        #     reciver.put()
-        #     def json_convert(self):
-        #         d=[];
-        #         for i in reciver.Content:
-        #             d.append({
-        #                 'Content': i.Content
-        #                 })
-        #     self.response.out(json.dumps(d))
-        # else:
-        #     self.response.out.write({"Error":"Reciver not found!"})
+       
     def get(self):
         pass
         
