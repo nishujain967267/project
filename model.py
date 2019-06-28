@@ -15,10 +15,10 @@ class Sender(ndb.Model):
     content=ndb.TextProperty()
     send_time=ndb.DateTimeProperty(auto_now_add=True)
    
-class Reciver(ndb.Model):
-    reciver_key=ndb.KeyProperty(kind=User)
-    content=ndb.TextProperty()
-    reciver_time=ndb.DateTimeProperty(auto_now_add=True)
+# class Reciver(ndb.Model):
+#     reciver_key=ndb.KeyProperty(kind=User)
+#     content=ndb.TextProperty()
+#     reciver_time=ndb.DateTimeProperty(auto_now_add=True)
 
 class Feeds(ndb.Model):
     user_key=ndb.KeyProperty(kind=User)
