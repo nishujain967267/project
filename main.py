@@ -78,24 +78,56 @@ class Login(webapp2.RequestHandler):
         pass
 class Messenger_R(webapp2.RequestHandler):
     def get(self):
-        #request=json.loads(self.request.body)
-        #print self
-        #reciver=Reciver()
-        #send=Sender()
-        #reciver_key=send.reciver_key
-        #query=Reciver.query(reciver_key==reciver.reciver_key).get()
-        #if (query):
-        #reciver.Content=send.Content
-        #reciver.put()
+        #req = json.loads(self.request.body)
         query=Sender.query().order(-Sender.content)
-        d=[]
+        d=[];
         for i in query:
             d.append({
-                'content':i.content
+                'content':d.content
                 })
-        self.response.out(json.dumps(d))
-    # def post(self):
-    #     pass
+        print d
+        self.response.out.write(json.dumps(d))
+            
+
+
+        
+        #send.sender_key = key1
+        #send.receiver_key = key2
+
+
+
+        #content = req.get('content'))
+        #chat.put()
+
+    #     #request=json.loads(self.request.body)
+    #     print self
+    #     #reciver=Reciver()
+    #     #end=Sender()
+    #     key1=sender_key.get()
+    #     key2=reciver_key.get()
+        
+
+    #     data=query(key1.reciver_key==key2.reciver_key)
+    #     if (data):
+    #         key2.content=key1.content
+    #         key2.put()
+    #         query=Reciver.query().order(-Reciver.content)
+    #         d=[]
+    #         for i in query:
+    #             d.append({
+    #                 'content':i.content
+    #                 })
+    #         self.response.out(json.dumps(d))
+           
+    #     else:
+    #         self.response.out.write("Reciver not found!")
+    #     #query=Reciver.query(reciver_key==reciver.reciver_key).get()
+    #     #if (query):
+    #     #reciver.Content=send.Content
+    #     # #reciver.put()
+        
+    def post(self):
+        pass
 
 class Messenger(webapp2.RequestHandler):
     def post(self):
@@ -134,6 +166,6 @@ app=webapp2.WSGIApplication([
     ('/msg',Messenger),
     ('/login',Login),
     ('/reciver',Messenger_R)
-    ])
+    ],debug=True)
 
 
