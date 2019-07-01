@@ -23,6 +23,7 @@ class Sender(ndb.Model):
 class Feeds(ndb.Model):
     user_key=ndb.KeyProperty(kind=User)
     post=ndb.TextProperty()
+    post_time=ndb.DateTimeProperty(auto_now_add=True)
     
 
 
