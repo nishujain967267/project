@@ -1,16 +1,18 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 import webapp2
 import json
 from model import*
 
 
 
-class MainPage(webapp2.RequestHandler):
+
+class Uplode(webapp2.RequestHandler):
     def post(self):
         request=json.loads(self.request.body)
         feeds=Feeds()
         print request.get('user_key')
-        feeds.user_key=ndb.Key(urlsafe=request.get('user_key'))
+        #feeds.user_key=ndb.Key(urlsafe=request.get('user_key'))
 
         feeds.post=request.get('post')
         feeds.put()
@@ -18,12 +20,35 @@ class MainPage(webapp2.RequestHandler):
                 d=[];
                 for i in feeds:
                     d.append({
-                        'user_key':d.user_key,
+                        #'user_key':d.user_key,
                         'post':d.post
                         })
                 self.response.out(json.dumps(d))
     def get(self):
         pass
+
+class MainPage(webapp2.RequestHandler):
+    feeds_per_page=10
+    def get(self):
+        #query=Feeds.query.fetch()   
+        #print query
+        cursor = Cursor(urlsafe=self.request.get('cursor'))
+        feed, next_cursor, more = Feeds.query().fetch_page(
+            self.feeds_per_page, start_cursor=cursor)
+
+        d=[];
+        for i in feed:
+            d.append({
+                'post':i.post,
+                'post_time':str(i.post_time)
+
+                })
+        print d
+        self.response.out.write({"more": more,"data":json.dumps(d), "curs":next_cursor.urlsafe()})
+                
+    def post(self):
+        pass
+
 
 class SignUp(webapp2.RequestHandler):
     def post(self):
@@ -77,16 +102,23 @@ class Login(webapp2.RequestHandler):
     def get(self):
         pass
 class Messenger_R(webapp2.RequestHandler):
+    messeges_per_page=10
     def get(self):
-        query=Sender.query().fetch()
-        print query
+        #query=Feeds.query.fetch()   
+        #print query
+        cursor = Cursor(urlsafe=self.request.get('cursor'))
+        messege, next_cursor, more = Sender.query().fetch_page(
+            self.messeges_per_page, start_cursor=cursor)
+
         d=[];
-        for i in query:
+        for i in messege:
             d.append({
-                'content':i.content
+                'content':i.content,
+                'send_time':str(i.send_time)
+
                 })
         print d
-        self.response.out.write(json.dumps(d))
+        self.response.out.write({"more": more,"data":json.dumps(d), "curs":next_cursor.urlsafe()})
                 
     def post(self):
         pass
@@ -106,7 +138,8 @@ class Messenger(webapp2.RequestHandler):
         pass
         
 app=webapp2.WSGIApplication([
-    ('/',MainPage),
+    ('/',Uplode),
+    ('/main',MainPage),
     ('/sign',SignUp),
     ('/msg',Messenger),
     ('/login',Login),
